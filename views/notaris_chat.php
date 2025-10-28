@@ -32,7 +32,7 @@
     </div>
   </div>
   
-  <form id="notarisChatForm" onsubmit="return sendNotarisMessage(event);">
+  <form id="notarisChatForm" action="javascript:void(0);" onsubmit="sendNotarisMessage(event); return false;">
     <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
     <input id="notarisMessageInput" name="text" placeholder="Balas pesan..." required autocomplete="off" />
     <button class="btn-primary" type="submit" id="notarisSendBtn">Kirim</button>

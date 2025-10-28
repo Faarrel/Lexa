@@ -44,7 +44,7 @@
       Catatan: ini hanya simulasi — tidak melakukan pembayaran nyata.
     </div>
   <?php else: ?>
-    <form id="chatForm" onsubmit="return sendMessage(event);">
+    <form id="chatForm" action="javascript:void(0);" onsubmit="sendMessage(event); return false;">
       <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
       <input id="messageInput" name="text" placeholder="Tulis pesan..." required autocomplete="off" />
       <button class="btn-primary" type="submit" id="sendBtn">Kirim</button>
