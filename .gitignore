@@ -1,0 +1,7 @@
+# Configuration files dengan sensitive data
+config.php
+
+# System files
+.DS_Store
+Thumbs.db
+

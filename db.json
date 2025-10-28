@@ -1,0 +1,189 @@
+{
+    "users": [
+        {
+            "id": "admin",
+            "name": "Admin",
+            "email": "admin@nd.com",
+            "role": "admin",
+            "password": "admin"
+        },
+        {
+            "id": "user1761666545",
+            "name": "farrel",
+            "email": "farrel@farrel.id",
+            "role": "user",
+            "password": "farrel"
+        },
+        {
+            "id": "notaris1761666557",
+            "name": "Dr. Farrel Sd. Smp. Sma. S. Kom",
+            "email": "notarisambalabu@nd.com",
+            "role": "notaris",
+            "password": "notaris",
+            "specialization": "Akta Tanah Sengketa",
+            "city": "Kendal",
+            "phone": "23847234234",
+            "rating": 5,
+            "reviews": 123,
+            "bio": "ya notaris",
+            "avatar": "uploads\/avatars\/notaris1761666557.jpg",
+            "tentang": "ya notaris",
+            "layanan_tarif": "akta tanah = rp 23823434234",
+            "pengalaman": "111+ Tahun",
+            "akta_selesai": "43534"
+        },
+        {
+            "id": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+            "name": "Dr. Aydin Ahmad Sahroni Spd. Mpd. SH",
+            "email": "aydin@aydin.id",
+            "role": "notaris",
+            "password": "notaris",
+            "avatar": "uploads\/avatars\/dr.aydinahmadsahronispd.mpd.sh1761669758.png",
+            "specialization": "Akta Tanah Sengketa",
+            "city": "Kendal",
+            "phone": "3428342432",
+            "rating": 3,
+            "reviews": 45,
+            "tentang": "aku suka anak kecil",
+            "layanan_tarif": "tessssss",
+            "pengalaman": "2",
+            "akta_selesai": "4"
+        }
+    ],
+    "chats": {
+        "chat_user1761666545_notaris1761666557": {
+            "participants": [
+                "user1761666545",
+                "notaris1761666557"
+            ],
+            "messages": [
+                {
+                    "from": "system",
+                    "text": "Sesi konsultasi dibuat (simulasi)."
+                },
+                {
+                    "from": "system",
+                    "text": "Pembayaran simulasi berhasil. Anda dapat berkonsultasi sekarang.",
+                    "ts": 1761666569
+                },
+                {
+                    "from": "notaris1761666557",
+                    "text": "hai",
+                    "ts": 1761666641
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "hai juga",
+                    "ts": 1761666646
+                },
+                {
+                    "from": "notaris1761666557",
+                    "text": "ada yang bisa dibantu?",
+                    "ts": 1761666777
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "gaada",
+                    "ts": 1761666780
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "hai",
+                    "ts": 1761670593
+                }
+            ],
+            "paid": true
+        },
+        "chat_admin_notaris1761666557": {
+            "participants": [
+                "admin",
+                "notaris1761666557"
+            ],
+            "messages": [
+                {
+                    "from": "system",
+                    "text": "Sesi konsultasi dibuat (simulasi)."
+                }
+            ],
+            "paid": false
+        },
+        "chat_user1761666545_dr.aydinahmadsahronispd.mpd.sh1761669758": {
+            "participants": [
+                "user1761666545",
+                "dr.aydinahmadsahronispd.mpd.sh1761669758"
+            ],
+            "messages": [
+                {
+                    "from": "system",
+                    "text": "Sesi konsultasi dibuat (simulasi)."
+                },
+                {
+                    "from": "system",
+                    "text": "Pembayaran simulasi berhasil. Anda dapat berkonsultasi sekarang.",
+                    "ts": 1761672170
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "halo",
+                    "ts": 1761672173
+                },
+                {
+                    "from": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+                    "text": "halo jiga",
+                    "ts": 1761672232
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "halo kak",
+                    "ts": 1761672597
+                },
+                {
+                    "from": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+                    "text": "iya kak, ada yang bisa dibantu?",
+                    "ts": 1761672604
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "gaada sih gabut ajah",
+                    "ts": 1761672610
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "hai",
+                    "ts": 1761673067
+                },
+                {
+                    "from": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+                    "text": "halo",
+                    "ts": 1761673072
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "halo",
+                    "ts": 1761673213
+                },
+                {
+                    "from": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+                    "text": "halo",
+                    "ts": 1761673216
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "testing",
+                    "ts": 1761673221
+                },
+                {
+                    "from": "dr.aydinahmadsahronispd.mpd.sh1761669758",
+                    "text": "masih okeh lah",
+                    "ts": 1761673233
+                },
+                {
+                    "from": "user1761666545",
+                    "text": "nah iya bener kan",
+                    "ts": 1761673238
+                }
+            ],
+            "paid": true
+        }
+    }
+}
