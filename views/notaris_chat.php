@@ -32,7 +32,7 @@
     </div>
   </div>
   
-  <form id="notarisChatForm" action="javascript:void(0);" onsubmit="sendNotarisMessage(event); return false;">
+  <form id="notarisChatForm" method="post" action="?api=send_message">
     <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
     <input id="notarisMessageInput" name="text" placeholder="Balas pesan..." required autocomplete="off" />
     <button class="btn-primary" type="submit" id="notarisSendBtn">Kirim</button>
@@ -41,11 +41,23 @@
 
   <script src="assets/notaris_chat.js"></script>
   <script>
-    initNotarisChatPage({
-      chatId: <?=json_encode($chatId)?>,
-      userId: <?=json_encode($user['id'])?>,
-      initialCount: <?=count($chat['messages'])?>
-    });
+    // Check if functions are loaded
+    if (typeof sendNotarisMessage === 'function' && typeof initNotarisChatPage === 'function') {
+      // Override form submission with AJAX
+      document.getElementById('notarisChatForm').onsubmit = function(e) {
+        e.preventDefault();
+        sendNotarisMessage(e);
+        return false;
+      };
+      
+      initNotarisChatPage({
+        chatId: <?=json_encode($chatId)?>,
+        userId: <?=json_encode($user['id'])?>,
+        initialCount: <?=count($chat['messages'])?>
+      });
+    } else {
+      console.error('Notaris chat functions not loaded. Form will use regular POST submission.');
+    }
   </script>
 
 

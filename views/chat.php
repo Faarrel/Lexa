@@ -44,7 +44,7 @@
       Catatan: ini hanya simulasi — tidak melakukan pembayaran nyata.
     </div>
   <?php else: ?>
-    <form id="chatForm" action="javascript:void(0);" onsubmit="sendMessage(event); return false;">
+    <form id="chatForm" method="post" action="?api=send_message">
       <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
       <input id="messageInput" name="text" placeholder="Tulis pesan..." required autocomplete="off" />
       <button class="btn-primary" type="submit" id="sendBtn">Kirim</button>
@@ -54,11 +54,23 @@
 
   <script src="assets/chat.js"></script>
   <script>
-    initChatPage({
-      chatId: <?=json_encode($chatId)?>,
-      currentUserId: <?=json_encode($user['id'])?>,
-      initialCount: <?=count($chat['messages'])?>
-    });
+    // Check if functions are loaded
+    if (typeof sendMessage === 'function' && typeof initChatPage === 'function') {
+      // Override form submission with AJAX
+      document.getElementById('chatForm').onsubmit = function(e) {
+        e.preventDefault();
+        sendMessage(e);
+        return false;
+      };
+      
+      initChatPage({
+        chatId: <?=json_encode($chatId)?>,
+        currentUserId: <?=json_encode($user['id'])?>,
+        initialCount: <?=count($chat['messages'])?>
+      });
+    } else {
+      console.error('Chat functions not loaded. Form will use regular POST submission.');
+    }
   </script>
 
 
