@@ -44,7 +44,8 @@
       Catatan: ini hanya simulasi — tidak melakukan pembayaran nyata.
     </div>
   <?php else: ?>
-    <form id="chatForm" method="post" action="?api=send_message">
+    <form id="chatForm" method="post" action="">
+      <input type="hidden" name="action" value="send_msg" />
       <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
       <input id="messageInput" name="text" placeholder="Tulis pesan..." required autocomplete="off" />
       <button class="btn-primary" type="submit" id="sendBtn">Kirim</button>
@@ -54,23 +55,32 @@
 
   <script src="assets/chat.js"></script>
   <script>
-    // Check if functions are loaded
-    if (typeof sendMessage === 'function' && typeof initChatPage === 'function') {
-      // Override form submission with AJAX
-      document.getElementById('chatForm').onsubmit = function(e) {
-        e.preventDefault();
-        sendMessage(e);
-        return false;
-      };
-      
-      initChatPage({
-        chatId: <?=json_encode($chatId)?>,
-        currentUserId: <?=json_encode($user['id'])?>,
-        initialCount: <?=count($chat['messages'])?>
-      });
-    } else {
-      console.error('Chat functions not loaded. Form will use regular POST submission.');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for DOM and scripts to load
+      setTimeout(function() {
+        var chatForm = document.getElementById('chatForm');
+        if (chatForm && typeof sendMessage === 'function') {
+          // Override form submission with AJAX
+          chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            sendMessage(e);
+            return false;
+          });
+          console.log('Chat AJAX mode enabled');
+        } else {
+          console.log('Chat fallback to POST mode');
+        }
+        
+        if (typeof initChatPage === 'function') {
+          initChatPage({
+            chatId: <?=json_encode($chatId)?>,
+            currentUserId: <?=json_encode($user['id'])?>,
+            initialCount: <?=count($chat['messages'])?>
+          });
+        }
+      }, 100);
+    });
   </script>
 
 

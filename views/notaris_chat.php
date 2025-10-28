@@ -32,7 +32,8 @@
     </div>
   </div>
   
-  <form id="notarisChatForm" method="post" action="?api=send_message">
+  <form id="notarisChatForm" method="post" action="">
+    <input type="hidden" name="action" value="send_msg" />
     <input type="hidden" name="chatId" value="<?=h($chatId)?>" />
     <input id="notarisMessageInput" name="text" placeholder="Balas pesan..." required autocomplete="off" />
     <button class="btn-primary" type="submit" id="notarisSendBtn">Kirim</button>
@@ -41,23 +42,32 @@
 
   <script src="assets/notaris_chat.js"></script>
   <script>
-    // Check if functions are loaded
-    if (typeof sendNotarisMessage === 'function' && typeof initNotarisChatPage === 'function') {
-      // Override form submission with AJAX
-      document.getElementById('notarisChatForm').onsubmit = function(e) {
-        e.preventDefault();
-        sendNotarisMessage(e);
-        return false;
-      };
-      
-      initNotarisChatPage({
-        chatId: <?=json_encode($chatId)?>,
-        userId: <?=json_encode($user['id'])?>,
-        initialCount: <?=count($chat['messages'])?>
-      });
-    } else {
-      console.error('Notaris chat functions not loaded. Form will use regular POST submission.');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for DOM and scripts to load
+      setTimeout(function() {
+        var notarisChatForm = document.getElementById('notarisChatForm');
+        if (notarisChatForm && typeof sendNotarisMessage === 'function') {
+          // Override form submission with AJAX
+          notarisChatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            sendNotarisMessage(e);
+            return false;
+          });
+          console.log('Notaris chat AJAX mode enabled');
+        } else {
+          console.log('Notaris chat fallback to POST mode');
+        }
+        
+        if (typeof initNotarisChatPage === 'function') {
+          initNotarisChatPage({
+            chatId: <?=json_encode($chatId)?>,
+            userId: <?=json_encode($user['id'])?>,
+            initialCount: <?=count($chat['messages'])?>
+          });
+        }
+      }, 100);
+    });
   </script>
 
 

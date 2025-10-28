@@ -49,7 +49,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		}
 		$db['chats'][$chatId]['messages'][] = ['from'=>$user['id'],'text'=>$text,'ts'=>time()];
 		save_db($db);
-		header("Location:?page=chat&chat={$chatId}"); exit;
+		// Redirect based on user role
+		$redirectPage = $isNotaris ? 'notaris_chat' : 'chat';
+		header("Location:?page={$redirectPage}&chat={$chatId}"); exit;
 	}
 	if(isset($_POST['action']) && $_POST['action'] === 'pay_sim'){
 		$db = load_db(); $chatId = $_POST['chatId']; if(isset($db['chats'][$chatId])){ $db['chats'][$chatId]['paid'] = true; $db['chats'][$chatId]['messages'][] = ['from'=>'system','text'=>'Pembayaran simulasi berhasil. Anda dapat berkonsultasi sekarang.','ts'=>time()]; save_db($db); }
