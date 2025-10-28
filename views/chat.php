@@ -53,34 +53,148 @@
     </form>
   <?php endif; ?>
 
-  <script src="assets/chat.js"></script>
   <script>
+  // Inline chat script for better reliability
+  (function() {
+    let chatConfig = {
+      chatId: <?=json_encode($chatId)?>,
+      currentUserId: <?=json_encode($user['id'])?>,
+      initialCount: <?=count($chat['messages'])?>
+    };
+    let lastMessageCount = chatConfig.initialCount;
+    let pollInterval = null;
+
+    function scrollToBottom() {
+      const chatArea = document.getElementById('chatArea');
+      if(chatArea) {
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+    }
+
+    function addMessage(text, isMe) {
+      const chatArea = document.getElementById('chatArea');
+      if(!chatArea) return;
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble ' + (isMe ? 'right' : 'left');
+      bubble.style.opacity = '0';
+      bubble.style.transform = 'translateY(10px)';
+      bubble.style.transition = 'all 0.3s ease';
+      bubble.textContent = text;
+      chatArea.appendChild(bubble);
+      
+      setTimeout(() => {
+        bubble.style.opacity = '1';
+        bubble.style.transform = 'translateY(0)';
+      }, 10);
+      
+      lastMessageCount++;
+      scrollToBottom();
+    }
+
+    function fetchMessages() {
+      if(!chatConfig.chatId) return;
+      
+      fetch('?api=get_messages&chat=' + encodeURIComponent(chatConfig.chatId))
+        .then(res => res.json())
+        .then(data => {
+          if(data.success && data.messages) {
+            const newCount = data.messages.length;
+            if(newCount > lastMessageCount) {
+              renderMessages(data.messages);
+              lastMessageCount = newCount;
+            }
+          }
+        })
+        .catch(err => console.error('Error fetching messages:', err));
+    }
+
+    function renderMessages(messages) {
+      const chatArea = document.getElementById('chatArea');
+      if(!chatArea) return;
+      
+      chatArea.innerHTML = '';
+      messages.forEach(m => {
+        const isMe = m.from === chatConfig.currentUserId;
+        const cls = m.from === 'system' ? 'left' : (isMe ? 'right' : 'left');
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble ' + cls;
+        bubble.textContent = m.text;
+        chatArea.appendChild(bubble);
+      });
+      scrollToBottom();
+    }
+
+    function sendMessage(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      const input = document.getElementById('messageInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const text = input.value.trim();
+      
+      if(!text) return false;
+      
+      input.disabled = true;
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Mengirim...';
+      
+      addMessage(text, true);
+      input.value = '';
+      
+      const formData = new FormData();
+      formData.append('chatId', chatConfig.chatId);
+      formData.append('text', text);
+      
+      fetch('?api=send_message', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(!data.success) {
+          alert('Gagal mengirim pesan: ' + (data.error || 'Unknown error'));
+        }
+        input.disabled = false;
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Kirim';
+        input.focus();
+      })
+      .catch(err => {
+        console.error('Error sending message:', err);
+        alert('Terjadi kesalahan saat mengirim pesan');
+        input.disabled = false;
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Kirim';
+        input.focus();
+      });
+      
+      return false;
+    }
+
+    // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', function() {
-      // Wait for DOM and scripts to load
-      setTimeout(function() {
-        var chatForm = document.getElementById('chatForm');
-        if (chatForm && typeof sendMessage === 'function') {
-          // Override form submission with AJAX
-          chatForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            sendMessage(e);
-            return false;
-          });
-          console.log('Chat AJAX mode enabled');
-        } else {
-          console.log('Chat fallback to POST mode');
-        }
-        
-        if (typeof initChatPage === 'function') {
-          initChatPage({
-            chatId: <?=json_encode($chatId)?>,
-            currentUserId: <?=json_encode($user['id'])?>,
-            initialCount: <?=count($chat['messages'])?>
-          });
-        }
-      }, 100);
+      scrollToBottom();
+      
+      // Start polling for new messages
+      pollInterval = setInterval(fetchMessages, 2000);
+      
+      // Override form submission
+      const chatForm = document.getElementById('chatForm');
+      if(chatForm) {
+        chatForm.addEventListener('submit', sendMessage);
+        console.log('Chat real-time mode enabled');
+      }
+      
+      const input = document.getElementById('messageInput');
+      if(input) input.focus();
+      
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', function() {
+        if(pollInterval) clearInterval(pollInterval);
+      });
     });
+  })();
   </script>
 
 
